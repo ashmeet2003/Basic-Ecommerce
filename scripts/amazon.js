@@ -1,4 +1,4 @@
-import {cart} from '../data/cart.js'; 
+import {cart, addToCart} from '../data/cart.js'; 
 import {products} from '../data/products.js';
 //step-1 -> save the data in JS done in product.js file in data
 let productsHTML = ``;  //string to combine all the generated HTML
@@ -63,40 +63,28 @@ document.querySelector(`.js-products-grid`).
   innerHTML = productsHTML; 
 //now we are generating HTML and putting it on webpage using DOM  
 
-//step 3 -> making it interactive
+//step 3 -> making webpage interactive
+function updateCartQuantity(){
+  //first calculating quantity
+  let cartQuantity = 0;
+  cart.forEach((cartItem) => {
+    cartQuantity += cartItem.quantity;
+  });
+
+  //displaying quantity on webpage
+  document.querySelector(`.js-cart-quantity`)
+    .innerHTML = cartQuantity;
+}
+
 // making add to cart button interactive using DOM
 document.querySelectorAll(`.js-add-to-cart`)
   .forEach((button)=>{
       button.addEventListener('click', ()=>{
         const productId = button.dataset.productId;             //saves id of product on clicking button in the variable
         
-        let matchingItem;               //variable to save already exusting item
-        // looping cart to check if item exist already
-        cart.forEach((item) => {                         
-          if(productId === item.productId){
-            matchingItem = item;
-          }
-        });
-
-        //if item exist, inc quantity, if not push to cart
-        if(matchingItem){                           
-          matchingItem.quantity++;
-        } else{
-          cart.push({                                                 
-            productId: productId,
-            quantity: 1
-          });
-        }
+        addToCart(productId);   
         //making cart quantity icon interactive
-        //first calculating quantity
-        let cartQuantity = 0;
-        cart.forEach((item) => {
-          cartQuantity += item.quantity;
-        });
-
-        //displaying quantity on webpage
-        document.querySelector(`.js-cart-quantity`)
-          .innerHTML = cartQuantity;
+        updateCartQuantity();
       });
   });
 
