@@ -1,5 +1,5 @@
 import {cart} from '../data/cart.js'; 
-
+import {products} from '../data/products.js';
 //step-1 -> save the data in JS done in product.js file in data
 let productsHTML = ``;  //string to combine all the generated HTML
 
