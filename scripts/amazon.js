@@ -48,15 +48,43 @@ products.forEach((product) => {
         Added
       </div>
 
-      <button class="add-to-cart-button button-primary">
+      <button class="add-to-cart-button button-primary js-add-to-cart"
+      data-product-id="${product.id}">
         Add to Cart
       </button>
     </div>  
   `;
 });
 
-console.log(productsHTML);
 // next step is to put it on webpage by DOM using another class given to product grid
 document.querySelector(`.js-products-grid`).
   innerHTML = productsHTML; 
 //now we are generating HTML and putting it on webpage using DOM  
+
+//step 3 -> making it interactive
+// making add to cart button interactive using DOM
+document.querySelectorAll(`.js-add-to-cart`)
+  .forEach((button)=>{
+      button.addEventListener('click', ()=>{
+        const productId = button.dataset.productId;             //saves id of product on clicking button in the variable
+        
+        let matchingItem;               //variable to save already exusting item
+        // looping cart to check if item exist already
+        cart.forEach((item) => {                         
+          if(productId === item.productId){
+            matchingItem = item;
+          }
+        });
+
+        //if item exist, inc quantity, if not push to cart
+        if(matchingItem){                           
+          matchingItem.quantity++;
+        } else{
+          cart.push({                                                 
+            productId: productId,
+            quantity: 1
+          });
+        }
+        console.log(cart);
+      });
+  });
