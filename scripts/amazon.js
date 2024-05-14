@@ -85,6 +85,17 @@ document.querySelectorAll(`.js-add-to-cart`)
             quantity: 1
           });
         }
-        console.log(cart);
+        //making cart quantity icon interactive
+        //first calculating quantity
+        let cartQuantity = 0;
+        cart.forEach((item) => {
+          cartQuantity += item.quantity;
+        });
+
+        //displaying quantity on webpage
+        document.querySelector(`.js-cart-quantity`)
+          .innerHTML = cartQuantity;
       });
   });
+
+
