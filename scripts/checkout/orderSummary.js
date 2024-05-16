@@ -3,6 +3,7 @@ import {products, getProduct} from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';  //default export
 import { deliveryOptions, getDeliveryOption } from '../../data/deliveryOptions.js';
+import { renderPaymentSummary } from './PaymentSummary.js';
 
 //function to regenerate HTML on clicking diff option
 export function renderOrderSummary(){
@@ -122,6 +123,9 @@ export function renderOrderSummary(){
         const container = document.querySelector(`.js-cart-item-container-${productId}`);
         //using remove method
         container.remove();
+
+        //Update HTML of payment summary
+        renderPaymentSummary();
       });
     });
 
@@ -134,6 +138,7 @@ export function renderOrderSummary(){
         
         //rerun all code ,ie, regenerate HTMl on selecting diff option using recursion
         renderOrderSummary();
+        renderPaymentSummary();
       });
     });
 }
