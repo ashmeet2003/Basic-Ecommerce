@@ -37,9 +37,8 @@ export function addToCart(productId){
       deliveryOptionId: '1'
 
     });
-
-    saveToStorage();
   }
+    saveToStorage(); 
 }
 
 export function removeFromCart(productId){
