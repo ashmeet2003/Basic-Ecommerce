@@ -18,7 +18,7 @@ function saveToStorage(){
   localStorage.setItem('cart', JSON.stringify(cart));             //as local storage only stores string
 }
 
-export function addToCart(productId){
+export function addToCart(productId, quantity){
   let matchingItem;               //variable to save already exusting item
   // looping cart to check if item exist already
   cart.forEach((cartItem) => {                         
@@ -29,11 +29,11 @@ export function addToCart(productId){
 
   //if item exist, inc quantity, if not push to cart
   if(matchingItem){                           
-    matchingItem.quantity++;
+    matchingItem.quantity += quantity;
   } else{
     cart.push({                                                 
       productId: productId,
-      quantity: 1,
+      quantity: quantity,
       deliveryOptionId: '1'
 
     });

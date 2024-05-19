@@ -31,7 +31,7 @@ products.forEach((product) => {
       </div>
 
       <div class="product-quantity-container">
-        <select>
+        <select class ="js-quantity-${product.id}">
           <option selected value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -49,7 +49,7 @@ products.forEach((product) => {
 
       <div class="product-spacer"></div>
 
-      <div class="added-to-cart">
+      <div class="added-to-cart js-added-${product.id}">
         <img src="images/icons/checkmark.png">
         Added
       </div>
@@ -80,15 +80,37 @@ function updateCartQuantity(){
     .innerHTML = cartQuantity;
 }
 
+//this object lets us save multiple timeout ids for different products
+const addedMessageTimeouts = {};
 // making add to cart button interactive using DOM
 document.querySelectorAll(`.js-add-to-cart`)
   .forEach((button)=>{
       button.addEventListener('click', ()=>{
         const productId = button.dataset.productId;             //saves id of product on clicking button in the variable
-        
-        addToCart(productId);   
+        const quantity = Number(document.querySelector(`.js-quantity-${productId}`).value);    //getting value of quantity selector
+        const addedMessage = document.querySelector(`.js-added-${productId}`);
+
+        addToCart(productId, quantity);   
+
         //making cart quantity icon interactive
         updateCartQuantity();
+
+        //added messsage
+        addedMessage.classList.add('added-to-cart-visible');
+        setTimeout(() => {
+          // Check if there's a previous timeout for this product. If there is, we should stop it.
+          const previousTimeoutId = addedMessageTimeouts[productId];
+          if (previousTimeoutId) {
+            clearTimeout(previousTimeoutId);
+          }
+    
+          const timeoutId = setTimeout(() => {
+            addedMessage.classList.remove('added-to-cart-visible');
+          }, 2000);
+    
+          // Save the timeoutId for this product so we can stop it later if we need to.
+          addedMessageTimeouts[productId] = timeoutId;
+        });
       });
   });
 
