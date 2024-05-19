@@ -79,7 +79,7 @@ function updateCartQuantity(){
   document.querySelector(`.js-cart-quantity`)
     .innerHTML = cartQuantity;
 }
-
+updateCartQuantity();
 //this object lets us save multiple timeout ids for different products
 const addedMessageTimeouts = {};
 // making add to cart button interactive using DOM
