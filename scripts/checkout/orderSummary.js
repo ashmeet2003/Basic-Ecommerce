@@ -124,10 +124,25 @@ export function renderOrderSummary(){
         //using remove method
         container.remove();
 
+        //updating checkout heading
+        updateCheckoutHeading();
         //Update HTML of payment summary
         renderPaymentSummary();
       });
     });
+
+  //showing cart items in heading
+  function updateCheckoutHeading() {
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+
+    document.querySelector('.js-checkout-heading')
+      .innerHTML = `${cartQuantity} items`;  
+  }
+  //calling the above function
+  updateCheckoutHeading();
 
   //adding event listeners to delivery option 
   document.querySelectorAll('.js-delivery-option')
