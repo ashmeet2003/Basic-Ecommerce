@@ -1,4 +1,4 @@
-import {cart, removeFromCart, updateDeliveryOption} from '../../data/cart.js';
+import {cart, removeFromCart, updateDeliveryOption, updateQuantity} from '../../data/cart.js';
 import {products, getProduct} from '../../data/products.js';
 import { formatCurrency } from '../utils/money.js';
 import dayjs from 'https://unpkg.com/dayjs@1.11.10/esm/index.js';  //default export
@@ -44,12 +44,19 @@ export function renderOrderSummary(){
             </div>
             <div class="product-quantity">
               <span>
-                Quantity: <span class="quantity-label">${cartItem.quantity}</span>
+                Quantity: <span class="quantity-label js-quantity-label-${matchingProduct.id}">${cartItem.quantity}</span>
               </span>
-              <span class="update-quantity-link link-primary">
+              <span class="update-quantity-link link-primary js-update-link"
+              data-product-id="${matchingProduct.id}" >
                 Update
               </span>
-              <span class="delete-quantity-link link-primary js-delete-link" data-product-id="${matchingProduct.id}">
+              <input class="quantity-input js-quantity-input">
+              <span class="save-quantity-link link-primary js-save-link"
+              data-product-id="${matchingProduct.id}">
+              Save
+              </span>
+              <span class="delete-quantity-link link-primary js-delete-link" 
+              data-product-id="${matchingProduct.id}">
                 Delete
               </span>
             </div>
@@ -131,6 +138,48 @@ export function renderOrderSummary(){
       });
     });
 
+  //making all update links interactive
+  document.querySelectorAll(`.js-update-link`)
+    .forEach((link) => {
+      link.addEventListener('click', () => {
+        const productId = link.dataset.productId;
+        const container = document.querySelector(
+          `.js-cart-item-container-${productId}`
+        );
+        container.classList.add('is-editing-quantity');
+      });  
+    });  
+   
+  //making save interactive
+  document.querySelectorAll('.js-save-link')
+  .forEach((link) => {
+    link.addEventListener('click', () => {
+      const productId = link.dataset.productId;
+
+      const container = document.querySelector(
+        `.js-cart-item-container-${productId}`
+      );
+      container.classList.remove('is-editing-quantity');
+
+      //getting value from input
+      const input = Number(document.querySelector('.js-quantity-input').value);
+      //return early if not valid input
+      if (input < 0 || input >= 1000) {
+        alert('Quantity must be at least 0 and less than 1000');
+        return;
+      }
+      updateQuantity(productId, input);
+
+      const quantityLabel = document.querySelector(
+        `.js-quantity-label-${productId}`
+      );
+      quantityLabel.innerHTML = input;
+
+      updateCheckoutHeading(); 
+      renderPaymentSummary();
+    });
+  });
+
   //showing cart items in heading
   function updateCheckoutHeading() {
     let cartQuantity = 0;
@@ -149,7 +198,7 @@ export function renderOrderSummary(){
     .forEach((element) => {
       element.addEventListener('click', () => {
         const {productId, deliveryOptionId} = element.dataset;   //taking aut these from data attribute
-        updateDeliveryOption(productId, deliveryOptionId);      //we use(added) data attributes to get these parameter
+        updateDeliveryOption(productId, deliveryOptionId);       //we use(added) data attributes to get these parameter
         
         //rerun all code ,ie, regenerate HTMl on selecting diff option using recursion
         renderOrderSummary();

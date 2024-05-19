@@ -55,7 +55,6 @@ export function removeFromCart(productId){
   saveToStorage();
 }
 
-//
 export function updateDeliveryOption(productId, deliveryOptionId){
   //getting the product from cart
   let matchingItem;               
@@ -66,6 +65,21 @@ export function updateDeliveryOption(productId, deliveryOptionId){
   });
   //updating it's deliveryOptionId
   matchingItem.deliveryOptionId = deliveryOptionId;
+
+  saveToStorage();
+}
+
+//to update quantity from input in checkout
+export function updateQuantity(productId, newQuantity) {
+  let matchingItem;
+
+  cart.forEach((cartItem) => {
+    if (productId === cartItem.productId) {
+      matchingItem = cartItem;
+    }
+  });
+
+  matchingItem.quantity = newQuantity;
 
   saveToStorage();
 }
