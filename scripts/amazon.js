@@ -2,84 +2,115 @@ import {cart, addToCart} from '../data/cart.js';
 import {products} from '../data/products.js';
 import { formatCurrency } from './utils/money.js';
 
-//step-1 -> save the data in JS done in product.js file in data
-let productsHTML = ``;  //string to combine all the generated HTML
+function renderProductsGrid() {
+  //step-1 -> save the data 
+  let productsHTML = ``;  //string to combine all the generated HTML
 
-// to generate HTML using saved data
-products.forEach((product) => {
-  productsHTML += `
-    <div class="product-container">
-      <div class="product-image-container">
-        <img class="product-image"
-          src="${product.image}">
-      </div>
+  const url = new URL(window.location.href);
+  const search = url.searchParams.get('search');
 
-      <div class="product-name limit-text-to-2-lines">
-        ${product.name}
-      </div>
+  let filteredProducts = products;
 
-      <div class="product-rating-container">
-        <img class="product-rating-stars"
-          src="${product.getStarsUrl()}">
-        <div class="product-rating-count link-primary">
-          ${product.rating.count}
+  // If a search exists in the URL parameters, filter the products that match the search.
+  if (search) {
+    filteredProducts = products.filter((product) => {
+      // search using key words
+      let matchingKeyword = false;
+      product.keywords.forEach((keyword) => {
+        if (keyword.toLowerCase().includes(search.toLowerCase())) {
+          matchingKeyword = true;
+        }
+      });
+
+      return matchingKeyword || product.name.toLowerCase().includes(search.toLowerCase());
+    });
+  }
+
+  // to generate HTML using saved data
+  filteredProducts.forEach((product) => {
+    productsHTML += `
+      <div class="product-container">
+        <div class="product-image-container">
+          <img class="product-image"
+            src="${product.image}">
         </div>
-      </div>
 
-      <div class="product-price">
-        $${product.getPrice()}     
-      </div>
+        <div class="product-name limit-text-to-2-lines">
+          ${product.name}
+        </div>
 
-      <div class="product-quantity-container">
-        <select class ="js-quantity-${product.id}">
-          <option selected value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-        </select>
-      </div>
+        <div class="product-rating-container">
+          <img class="product-rating-stars"
+            src="${product.getStarsUrl()}">
+          <div class="product-rating-count link-primary">
+            ${product.rating.count}
+          </div>
+        </div>
 
-      ${product.extraInfoHTML()}
+        <div class="product-price">
+          $${product.getPrice()}     
+        </div>
 
-      <div class="product-spacer"></div>
+        <div class="product-quantity-container">
+          <select class ="js-quantity-${product.id}">
+            <option selected value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
 
-      <div class="added-to-cart js-added-${product.id}">
-        <img src="images/icons/checkmark.png">
-        Added
-      </div>
+        ${product.extraInfoHTML()}
 
-      <button class="add-to-cart-button button-primary js-add-to-cart"
-      data-product-id="${product.id}">
-        Add to Cart
-      </button>
-    </div>  
-  `;
-});
+        <div class="product-spacer"></div>
 
-// next step is to put it on webpage by DOM using another class given to product grid
-document.querySelector(`.js-products-grid`).
-  innerHTML = productsHTML; 
-//now we are generating HTML and putting it on webpage using DOM  
+        <div class="added-to-cart js-added-${product.id}">
+          <img src="images/icons/checkmark.png">
+          Added
+        </div>
 
-//step 3 -> making webpage interactive
-function updateCartQuantity(){
-  //first calculating quantity
-  let cartQuantity = 0;
-  cart.forEach((cartItem) => {
-    cartQuantity += cartItem.quantity;
+        <button class="add-to-cart-button button-primary js-add-to-cart"
+        data-product-id="${product.id}">
+          Add to Cart
+        </button>
+      </div>  
+    `;
   });
 
-  //displaying quantity on webpage
-  document.querySelector(`.js-cart-quantity`)
-    .innerHTML = cartQuantity;
+  // next step is to put it on webpage by DOM using another class given to product grid
+  document.querySelector(`.js-products-grid`).
+    innerHTML = productsHTML; 
+  //now we are generating HTML and putting it on webpage using DOM  
+
+  //step 3 -> making webpage interactive
+  function updateCartQuantity(){
+    //first calculating quantity
+    let cartQuantity = 0;
+    cart.forEach((cartItem) => {
+      cartQuantity += cartItem.quantity;
+    });
+
+    //displaying quantity on webpage
+    document.querySelector(`.js-cart-quantity`)
+      .innerHTML = cartQuantity;
+  }
+  updateCartQuantity();
+  
+  //making search bar and button interactive
+  document.querySelector('.js-search-button')
+      .addEventListener('click', () => {
+        const search = document.querySelector('.js-search-bar').value;
+        window.location.href = `amazon.html?search=${search}`;
+      });
 }
-updateCartQuantity();
+renderProductsGrid();
+
 //this object lets us save multiple timeout ids for different products
 const addedMessageTimeouts = {};
 // making add to cart button interactive using DOM
