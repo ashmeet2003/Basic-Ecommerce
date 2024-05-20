@@ -90,6 +90,7 @@ function loadPage(){
     document.querySelector(`.js-cart-quantity`)
       .innerHTML = cartQuantity;
   }
+  updateCartQuantity(); 
 
   document.querySelectorAll('.js-buy-again').forEach((button) => {
     button.addEventListener('click', () => {

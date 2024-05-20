@@ -68,7 +68,7 @@ document.querySelector(`.js-products-grid`).
 //now we are generating HTML and putting it on webpage using DOM  
 
 //step 3 -> making webpage interactive
-export function updateCartQuantity(){
+function updateCartQuantity(){
   //first calculating quantity
   let cartQuantity = 0;
   cart.forEach((cartItem) => {
