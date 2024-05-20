@@ -91,6 +91,7 @@ export function renderPaymentSummary(){
         })
         const order = await response.json(); //grt the data out of response
         addOrders(order);
+        console.log(orders);
         } catch (error) {
           console.log('unexpected error');
         }
