@@ -101,15 +101,12 @@ function renderProductsGrid() {
       .innerHTML = cartQuantity;
   }
   updateCartQuantity();
-  
   //making search bar and button interactive
   document.querySelector('.js-search-button')
       .addEventListener('click', () => {
         const search = document.querySelector('.js-search-bar').value;
         window.location.href = `amazon.html?search=${search}`;
       });
-}
-renderProductsGrid();
 
 //this object lets us save multiple timeout ids for different products
 const addedMessageTimeouts = {};
@@ -144,5 +141,9 @@ document.querySelectorAll(`.js-add-to-cart`)
         });
       });
   });
+}
+
+renderProductsGrid();
+
 
 

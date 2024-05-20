@@ -83,3 +83,9 @@ export function updateQuantity(productId, newQuantity) {
 
   saveToStorage();
 }
+
+// to the cart empty after creating an order.
+export function resetCart() {
+  cart = [];
+  saveToStorage();
+}
