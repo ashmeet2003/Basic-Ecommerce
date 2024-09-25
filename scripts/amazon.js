@@ -108,10 +108,10 @@ function renderProductsGrid() {
         window.location.href = `amazon.html?search=${search}`;
       });
 
-//this object lets us save multiple timeout ids for different products
-const addedMessageTimeouts = {};
-// making add to cart button interactive using DOM
-document.querySelectorAll(`.js-add-to-cart`)
+  //this object lets us save multiple timeout ids for different products
+  const addedMessageTimeouts = {};
+  // making add to cart button interactive using DOM
+  document.querySelectorAll(`.js-add-to-cart`)
   .forEach((button)=>{
       button.addEventListener('click', ()=>{
         const productId = button.dataset.productId;             //saves id of product on clicking button in the variable
