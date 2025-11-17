@@ -4,7 +4,7 @@ import { formatCurrency } from './utils/money.js';
 
 function renderProductsGrid() {
   //step-1 -> save the data 
-  let productsHTML = ``;  //string to combine all the generated HTML
+  let productsHTML = ``;  
 
   const url = new URL(window.location.href);
   const search = url.searchParams.get('search');
